@@ -1,0 +1,53 @@
+scalar BigDecimal
+scalar Date
+
+type Transaction {
+    id: ID!
+    amount: BigDecimal!
+    description: String!
+    date: Date!
+    type: TransactionType!
+    category: Category
+    account: Account!
+}
+
+type Category {
+    id: ID!
+    name: String!
+    transactions: [Transaction!]!
+}
+
+type Account {
+    id: ID!
+    name: String!
+    balance: BigDecimal!
+    transactions: [Transaction!]!
+}
+
+enum TransactionType {
+    INCOME
+    EXPENSE
+}
+
+type Query {
+    transaction(id: ID!): Transaction
+    allTransactions: [Transaction!]!
+    category(id: ID!): Category
+    allCategories: [Category!]!
+    account(id: ID!): Account
+    allAccounts: [Account!]!
+}
+
+type Mutation {
+    createTransaction(amount: BigDecimal!, description: String!, date: Date!, type: TransactionType!, categoryId: ID, accountId: ID!): Transaction!
+    updateTransaction(id: ID!, amount: BigDecimal, description: String, date: Date, type: TransactionType, categoryId: ID, accountId: ID): Transaction!
+    deleteTransaction(id: ID!): Boolean!
+
+    createCategory(name: String!): Category!
+    updateCategory(id: ID!, name: String!): Category!
+    deleteCategory(id: ID!): Boolean!
+
+    createAccount(name: String!, initialBalance: BigDecimal!): Account!
+    updateAccount(id: ID!, name: String, balance: BigDecimal): Account!
+    deleteAccount(id: ID!): Boolean!
+}
